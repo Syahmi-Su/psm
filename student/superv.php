@@ -8,6 +8,7 @@
   $sqla= "SELECT * FROM tb_proposal
   LEFT JOIN tb_status on tb_proposal.statID = tb_status.statusID
   LEFT JOIN pojname on tb_proposal.proptype = pojname.projTypeID";
+  //WHERE SESSION
   $resulta = mysqli_query($con, $sqla) ;
   $row=mysqli_fetch_array($resulta);
  ?>
@@ -130,53 +131,10 @@
            List of Lecture</div>
           <div class="card-body">
         <!--     ADD ID HERE -->
-            <div class="card-body"> <b>CURRENT SUPERVISOR: <?php " "; echo $row['supName'] ; ?></b> </div>
-          </div>
-
-            <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                   <tr>
-                    <th>Proposal Title</th>
-                    <th>Proposal Type</th>
-                    <th>Upload Form</th>
-                    <th>Proposal Status</th>
-                    <th>Evaluator Comment</th>
-                  </tr>
-              </thead>
-              <tbody>
-                   <?php
-                    $sqla= "SELECT * FROM tb_proposal
-                            LEFT JOIN tb_status on tb_proposal.statID = tb_status.statusID
-                            LEFT JOIN pojname on tb_proposal.proptype = pojname.projTypeID";
-                    //WHERE studnName = session ID";
-                    $resulta = mysqli_query($con, $sqla) ;
-                      while($row=mysqli_fetch_array($resulta))
-                      {
-                        echo "<tr>";
-                        echo "<td>".$row['propName']."</td>";
-                          
-                        echo "<td>".$row['projName']."</td>";
-                        
-                        echo "<td>";
-                        echo '<button type="button" class="btn btn-success" data-toggle="modal" data-target="#formModal" data-whatever="'.$row['proposalID'].'">
-                                  Upload
-                                </button>';
-                        echo "</td>";
-
-                        echo "<td>".$row['statInfo']."</td>";
-
-                        echo "<td>".$row['evalComment']."</td>";
-
-                        echo "</tr>";
-                      }
-                      ?>
-                </tbody>
-              </table>
-              <br>
-              <button type="button" class="btn btn-primary" style="float: right" data-toggle="modal" data-target="#myModal">Add Proposal</button>
-            </div>
+            <div class="card-body"> <b>CURRENT SUPERVISOR: </b><?php " "; echo $row['supName'] ; ?> </div>
+            <?php echo '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#supModal"">
+                                  Update
+                                </button>'; ?>
           </div>
 
         </div>
@@ -199,61 +157,54 @@
   </div>
   <!-- /#wrapper -->
 
-<!--   ADD PROPOSAL MODAL  -->
-  <div class="modal" id="myModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 style="align-self: "> Add Proposal </h4>
-          <button type="button btn-primary" class="close" data-dismiss="modal">×</button>
-        </div>
-        <!-- Modal body -->
-        <div class="modal-body">
-        <form method="POST" action="addprocess.php">
-
-        <div class="form-group">
-        <label for="LectID">Proposal Title</label>
-        <input type="text" class="form-control" id="LectID" placeholder="Proposal Title" name="propName" onkeypress="return isNumberKey(event)" required>
-        </div>
-
-        <div class="form-group">
-        <label for="Role">Proposal Domain Type</label> <br>
-        
-        <?php
-                $sqls = "SELECT * FROM pojname";
-                $results = mysqli_query($con,$sqls);
-
-                echo '<select class="form-control" id="Role" name="Role">';
-                 while($rows=mysqli_fetch_array($results))
-                {
-
-                    echo"<option value= '".$rows['projTypeID']."'>".$rows['projName']."</option>";
-
-                }
-                echo '</select>';
-                ?>
-        </div>
-
-        <!-- ADD HIDDEN ID HERE -->
-        <button type="submit" class="button btn-info">Add</button>
-        <button type="reset" class="button btn-warning">Reset</button>
-        <br><br>
-        </form>
-        </div>
-           <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="button btn-danger" data-dismiss="modal">Close</button>
-        </div>         
-      </div>
-    </div>
-  </div>
-
 
   <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
+
+     <!-- Change Supervisor Modal-->
+  <div class="modal fade" id="supModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Change Supervisor?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+         <div class="modal-body">
+        <form method ="POST" action="supervprocess.php">  
+        <div class="form-group">
+        <label for="admin">Decision</label>
+                  <?php 
+                  $sqlb = "SELECT * FROM lecture";
+                  $resultb = mysqli_query($con,$sqlb);
+
+                  echo '<select class="form-control" id="lectid" name="lectid">';
+                   while($rowb=mysqli_fetch_array($resultb))
+                   {
+                    if($rowb['lectName'] == $row['lectName'])
+                    {
+                     echo "<option  selected ='selected' value = '".$rowb['lectName']."'>".$rowb['lectName']."</option>";
+                    }
+                    else
+                    echo "<option value = '".$rowb['lectName']."'>".$rowb['lectName']."</option>";
+
+                   }
+                  echo '</select>';
+                  ?>
+                   <br><button type="Book" class="btn btn-primary">Select</button>
+        </div>
+      </form>
+    </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
      <!-- Logout Modal-->
   <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -268,35 +219,6 @@
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
           <a class="btn btn-primary" href="logout.php">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-       <!--Upload Form Modal-->
-  <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Upload Form</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form action="uploadformprocess.php" method="post" enctype="multipart/form-data">
-             <!--  INSERT HIDDEN ID HERE -->
-              <div class="custom-file mb-3">
-                <input type="file" class="custom-file-input" id="fileName" name="fileName">
-                <label class="custom-file-label" for="customFile">Choose file</label>
-              </div>      
-              <div class="mt-3">
-                <button type="submit" class="button btn-primary">Submit</button>
-              </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>
