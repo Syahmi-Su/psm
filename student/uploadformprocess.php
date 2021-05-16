@@ -13,7 +13,7 @@ include ('dbconnect.php');
 
 $sql = "SELECT * 
         FROM tb_proposal
-        WHERE proposalID = '2'";
+        WHERE proposalID = '1'";
 $result = mysqli_query($con,$sql);
 $row = mysqli_fetch_array($result);
 
@@ -42,17 +42,17 @@ if(isset($_POST["submit"])) {
         $uploadOk = 0;
     }
 }
-// Check if file already exists
-if (file_exists($target_file)) 
-{
-    echo '<script language="javascript">';
-        echo 'alert("Sorry, file already exists.");';
-        echo 'window.location= "student.php"';
-       echo '</script>';
+// // Check if file already exists
+// if (file_exists($target_file)) 
+// {
+//     echo '<script language="javascript">';
+//         echo 'alert("Sorry, file already exists.");';
+//         echo 'window.location= "student.php"';
+//        echo '</script>';
     
 
-    $uploadOk = 0;
-}
+//     $uploadOk = 0;
+// }
 // Check file size
 if ($_FILES["fileName"]["size"] > 500000) {
     echo '<script language="javascript">';
@@ -81,6 +81,9 @@ if ($uploadOk == 0) {
 
 // if everything is ok, try to upload file
 } else {
+
+    if (file_exists($target_file)) unlink($target_file);
+
     if (move_uploaded_file($_FILES["fileName"]["tmp_name"], $target_file)) {
        
          echo '<script language="javascript">';
@@ -89,7 +92,7 @@ if ($uploadOk == 0) {
        echo '</script>';
         $insert ="UPDATE tb_proposal
                  SET propform = '$name' 
-                 WHERE proposalID = '2' ";
+                 WHERE proposalID = '1' ";
        $res = mysqli_query($con, $insert);
         mysqli_close($con);
         header('Location:student.php');

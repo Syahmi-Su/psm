@@ -1,11 +1,8 @@
 <?php 
-  // include ('dbsession.php');
-  // if($_SESSION['c_ic']!='ADMIN')
-  // {
-  // header('location:../index.php');
-  // }
+ include ('dbsession.php');
  include ('dbconnect.php');
 
+$ID = $_SESSION['lectID'];
 $wid = $_GET['id'];
 $sql= "SELECT * FROM tb_proposal
        WHERE proposalID = '$wid' ";

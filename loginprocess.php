@@ -6,49 +6,76 @@
 //Get DB Connection
     include("dbconnect.php");
     $pic =$_POST['pic'];
-    $ppassword =$_POST['ppassword'];
+    $pass =$_POST['ppassword'];
 
     //Get User Info (Retrieve)
-    $sql = "SELECT * FROM tb_customer WHERE c_ic='$pic' ";
+    $sql1 = "SELECT * FROM admin WHERE adminID = '$pic' AND adminPass = '$pass'  ";
+    $sql2 = "SELECT * FROM lecture WHERE lectID = '$pic' AND lectPass = '$pass' AND roleID = '2' ";
+    $sql3 = "SELECT * FROM student  WHERE studMatric = '$pic' AND studPass = '$pass'";
+    $sql4 = "SELECT * FROM lecture WHERE lectID = '$pic' AND lectPass = '$pass' AND roleID = '1' ";
+
 
     //Execute SQL
-    $result=mysqli_query($con,$sql);
-    $row=mysqli_fetch_array($result);
+    $result1=mysqli_query($con,$sql1);
+    $result2=mysqli_query($con,$sql2);
+    $result3=mysqli_query($con,$sql3);
+    $result4=mysqli_query($con,$sql4);
+    $row1=mysqli_fetch_array($result1);
+    $row2=mysqli_fetch_array($result2);
+    $row3=mysqli_fetch_array($result3);
+    $row4=mysqli_fetch_array($result4);
 
-
-    if(password_verify($ppassword, $row['c_password']))
-    {
 
    //Check data exist
-    $count=mysqli_num_rows($result);
+    $count1 = mysqli_num_rows($result1);
+    $count2 = mysqli_num_rows($result2);
+    $count3 = mysqli_num_rows($result3);
+    $count4 = mysqli_num_rows($result4);
+
 
 
     //check login
-    if($count==1)
+    //check login
+    if($count1 == 1)
     {
-        //Set session
-        $_SESSION['c_ic']= session_id();
-        $_SESSION['c_ic']= $pic; //to store user ID
+         $_SESSION['adminID'] = session_id();
+         $_SESSION['adminID'] = $pic;
 
-        if($row['c_ic'] == 'ADMIN')
-        {
-            
-            header('Location: admin/admin.php');
-        }
-        else
-        {
-            header('Location: booking/booking.php');
-               
-        }
+         header ('Location: admin/tables.php');
+
     }
-    }
-    else
+
+    else if($count2 == 1  )
     {
-        $message = "Username and/or Password incorrect.\\nTry again.";
-        echo "<script type='text/javascript'>alert('$message'); window.location.href='login.php';</script>";
+        $_SESSION['lectID'] = session_id();
+        $_SESSION['lectID'] = $pic;
 
+        header ('Location: lect/lecture.php');
     }
 
+
+    else if($count4 == 1  )
+    {
+        $_SESSION['lectID'] = session_id();
+        $_SESSION['lectID'] = $pic;
+
+        header ('Location: com/committee.php');
+    }
+
+    else if($count3 == 1 )
+    {
+        $_SESSION['studMatric'] = session_id();
+        $_SESSION['studMatric'] = $pic;
+
+        header ('Location: student/student.php');
+    }
+
+                else
+            {
+                $message = "Username and/or Password incorrect.\\nTry again.";
+                echo "<script type='text/javascript'>alert('$message'); window.location.href='index.php';</script>";
+
+            }
 
 
     //close db connection

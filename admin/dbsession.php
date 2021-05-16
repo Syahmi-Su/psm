@@ -5,8 +5,8 @@
         session_start();
     }
 
-    if (isset($_SESSION['c_ic']) != session_id())
+    if (isset($_SESSION['adminID']) != session_id())
     {
-         header('Location: Index.php');
+        echo "error";
     }
 ?>

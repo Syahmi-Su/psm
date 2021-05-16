@@ -1,10 +1,7 @@
 <?php 
-  // include ('dbsession.php');
-  // if($_SESSION['c_ic']!='ADMIN')
-  // {
-  // header('location:../index.php');
-  // }
+ include ('dbsession.php');
  include ('dbconnect.php');
+  $ID = $_SESSION['lectID'];
 
  ?>
 
@@ -111,14 +108,6 @@
 
       <div class="container-fluid">
 
-        <!-- Breadcrumbs-->
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="admin.php">Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active">Tables</li>
-        </ol>
-
         <!-- DataTables Example -->
         <div class="card mb-3">
           <div class="card-header">
@@ -132,7 +121,7 @@
                     <th style="width:30%">Proposal Title</th>
                     <th style="width:15%">Student Matric No.</th>
                     <th style="width:20%">Supervisor Name</th>
-                    <th style="width:15%">File</th>
+                    <th style="width:15%">Proposal File</th>
                     <th style="width:10%">Comment</th>
                     <th style="width:20%">Status</th>
                     <th style="width:10%">Operation</th>
@@ -142,7 +131,10 @@
                <tbody>
                    <?php
                     $sql= "SELECT * FROM tb_proposal
-                    LEFT JOIN tb_status ON tb_proposal.statID = tb_status.statusID";
+                    LEFT JOIN tb_status ON tb_proposal.statID = tb_status.statusID
+                    LEFT JOIN lecture AS u1 ON u1.lectName = tb_proposal.evalName2
+                    LEFT JOIN lecture AS u2 ON u2.lectName = tb_proposal.evalName1
+                    WHERE u1.LectID = '$ID' OR u2.LectID = '$ID'";
                     $result = mysqli_query($con, $sql) ;
                       while($row=mysqli_fetch_array($result))
                       {
@@ -154,7 +146,7 @@
 
                           echo "<td>".$row['supName']."</td>";
 
-                          echo "<td>".$row['propform']."</td>";
+                          echo "<td><a href='../form/".$row['propform']."'> Download </a></td>";
 
                           echo "<td>";
                           echo "&nbsp&nbsp&nbsp<a href ='viewcomment.php?id=".$row['proposalID']."' class ='btn btn-primary'>View</a>";

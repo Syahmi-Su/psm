@@ -1,10 +1,7 @@
 <?php 
-  // include ('dbsession.php');
-  // if($_SESSION['c_ic']!='ADMIN')
-  // {
-  // header('location:../index.php');
-  // }
+ include ('dbsession.php');
  include ('dbconnect.php');
+ $ID = $_SESSION['adminID'];
 
  ?>
 
@@ -68,7 +65,7 @@
         <form method="POST" action="registerprocess.php">
 
         <div class="form-group">
-        <label for="LectID">Lecture ID</label>
+        <label for="LectID">Lecture ID </label>
         <input type="text" class="form-control" id="LectID" placeholder="Lecture ID" name="LectID" onkeypress="return isNumberKey(event)" required>
         </div>
 
@@ -161,32 +158,12 @@
           <span>Lecture List</span></a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="tables.php">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Comittee List</span></a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="tables.php">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Supervisor List</span></a>
-      </li>
-
     </ul>
 
     <div id="content-wrapper">
 
       <div class="container-fluid">
-
-        <!-- Breadcrumbs-->
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="admin.php">Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active">Tables</li>
-        </ol>
-
+        
         <!-- DataTables Example -->
         <div class="card mb-3">
           <div class="card-header">

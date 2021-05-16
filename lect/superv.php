@@ -1,11 +1,8 @@
 <?php 
-  // include ('dbsession.php');
-  // if($_SESSION['c_ic']!='ADMIN')
-  // {
-  // header('location:../index.php');
-  // }
+ include ('dbsession.php');
  include ('dbconnect.php');
-
+ 
+ $ID = $_SESSION['lectID'];
  ?>
 
 <!DOCTYPE html>
@@ -53,68 +50,6 @@
 </head>
 
 <body id="page-top">
-
-<!--   MODAL for Register -->
-  <div class="modal" id="myModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 style="align-self: "> Add Lecture </h4>
-          <button type="button btn-primary" class="close" data-dismiss="modal">×</button>
-        </div>
-        <!-- Modal body -->
-        <div class="modal-body">
-        <form method="POST" action="registerprocess.php">
-
-        <div class="form-group">
-        <label for="LectID">Lecture ID</label>
-        <input type="text" class="form-control" id="LectID" placeholder="Lecture ID" name="LectID" onkeypress="return isNumberKey(event)" required>
-        </div>
-
-        <div class="form-group">
-        <label for="LectName">Lecture Name</label>
-        <input type="text" class="form-control" id="LectName" placeholder="Lecture Name" name="LectName" required>
-        </div>
-
-        <div class="form-group">
-        <label for="Role">Role</label> <br>
-        
-        <?php
-                $sqls = "SELECT * FROM tb_role";
-                $results = mysqli_query($con,$sqls);
-
-                echo '<select class="form-control" id="Role" name="Role">';
-                 while($rows=mysqli_fetch_array($results))
-                {
-
-                    echo"<option value= '".$rows['role_ID']."'>".$rows['roleName']."</option>";
-
-                }
-                echo '</select>';
-                ?>
-        </div>
-
-        <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" class="form-control" id="password" placeholder="Enter password" name="password" pattern=".{6,}" title = "Must at least have 6 charachter" required>
-        </div>
-
-        <button type="submit" class="button btn-info">Add</button>
-        <button type="reset" class="button btn-warning">Reset</button>
-        <br><br>
-        </form>
-        </div>
-           <!-- Modal footer -->
-        <div class="modal-footer">
-        <button type="button" class="button btn-danger" data-dismiss="modal">Close</button>
-        </div>         
-            </div>
-            </div>
-        </div>
-
-
-
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
     <a class="navbar-brand mr-1" href="admin.php">PSMOne</a>
@@ -204,7 +139,9 @@
                    <?php
                     $sql= "SELECT * FROM tb_proposal
                     LEFT JOIN tb_status ON tb_proposal.statID = tb_status.statusID
-                    LEFT JOIN student ON tb_proposal.studMatric = student.studMatric";
+                    LEFT JOIN student ON tb_proposal.studMatric = student.studMatric
+                    LEFT JOIN lecture ON tb_proposal.supName = lecture.lectName
+                    WHERE lecture.lectID = '$ID'";
                     $result = mysqli_query($con, $sql) ;
                       while($row=mysqli_fetch_array($result))
                       {
@@ -214,7 +151,7 @@
 
                           echo "<td>".$row['acadSemester']."</td>";
 
-                          echo "<td><a href='download.php'>".$row['propName']."</a></td>";
+                          echo "<td><a href='../form/".$row['propform']."'>".$row['propName']."</a></td>";
                           
                           echo "<td>";
                           echo "&nbsp&nbsp&nbsp<a href ='supervcomment.php?id=".$row['proposalID']."' class ='btn btn-primary'>View</a>";

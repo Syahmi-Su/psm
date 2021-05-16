@@ -5,8 +5,8 @@
         session_start();
     }
 
-    if (isset($_SESSION['c_ic']) != session_id())
+    if (isset($_SESSION['lectID']) != session_id())
     {
-         header('Location: Index.php');
+         header('Location: ../Index.php');
     }
 ?>
