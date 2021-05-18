@@ -9,11 +9,11 @@ include ('dbconnect.php');
 // }
 
  //$pic = $_SESSION['pic'];
- //$rid = $_POST['rid'];
+ $pid = $_POST['fbid'];
 
 $sql = "SELECT * 
         FROM tb_proposal
-        WHERE proposalID = '1'";
+        WHERE proposalID = '$pid'";
 $result = mysqli_query($con,$sql);
 $row = mysqli_fetch_array($result);
 
@@ -38,21 +38,10 @@ if(isset($_POST["submit"])) {
         echo "File is an image - " . $check["mime"] . ".";
         $uploadOk = 1;
     } else {
-        echo "File is not an image.";
+        echo "File is not an pdf.";
         $uploadOk = 0;
     }
 }
-// // Check if file already exists
-// if (file_exists($target_file)) 
-// {
-//     echo '<script language="javascript">';
-//         echo 'alert("Sorry, file already exists.");';
-//         echo 'window.location= "student.php"';
-//        echo '</script>';
-    
-
-//     $uploadOk = 0;
-// }
 // Check file size
 if ($_FILES["fileName"]["size"] > 500000) {
     echo '<script language="javascript">';
@@ -92,7 +81,7 @@ if ($uploadOk == 0) {
        echo '</script>';
         $insert ="UPDATE tb_proposal
                  SET propform = '$name' 
-                 WHERE proposalID = '1' ";
+                 WHERE proposalID = '$pid' ";
        $res = mysqli_query($con, $insert);
         mysqli_close($con);
         header('Location:student.php');

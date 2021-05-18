@@ -1,9 +1,6 @@
 <?php 
-  // include ('dbsession.php');
-  // if($_SESSION['c_ic']!='ADMIN')
-  // {
-  // header('location:../index.php');
-  // }
+  include ('dbsession.php');
+
  include ('dbconnect.php');
   $sqla= "SELECT * FROM tb_proposal
   LEFT JOIN tb_status on tb_proposal.statID = tb_status.statusID
@@ -115,14 +112,6 @@
     <div id="content-wrapper">
 
       <div class="container-fluid">
-
-        <!-- Breadcrumbs-->
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="admin.php">Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active">Tables</li>
-        </ol>
 
         <!-- DataTables Example -->
         <div class="card mb-3">
