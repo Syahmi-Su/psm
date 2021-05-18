@@ -20,7 +20,7 @@
             SET supComment = '$comment'
             WHERE proposalID = '$wid' ";
 
- var_dump($sql);     
+// var_dump($sql);     
 
     $result = mysqli_query($con,$sql);
     mysqli_close($con);     
