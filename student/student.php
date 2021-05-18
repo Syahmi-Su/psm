@@ -1,10 +1,8 @@
 <?php 
-  // include ('dbsession.php');
-  // if($_SESSION['c_ic']!='ADMIN')
-  // {
-  // header('location:../index.php');
-  // }
+ include ('dbsession.php');
  include ('dbconnect.php');
+
+$ID = $_SESSION['studMatric'];
 
  ?>
 
@@ -111,13 +109,6 @@
 
       <div class="container-fluid">
 
-        <!-- Breadcrumbs-->
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="admin.php">Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active">Tables</li>
-        </ol>
 
         <!-- DataTables Example -->
         <div class="card mb-3">
@@ -140,7 +131,8 @@
                    <?php
                     $sqla= "SELECT * FROM tb_proposal
                             LEFT JOIN tb_status on tb_proposal.statID = tb_status.statusID
-                            LEFT JOIN pojname on tb_proposal.proptype = pojname.projTypeID";
+                            LEFT JOIN pojname on tb_proposal.proptype = pojname.projTypeID
+                            WHERE studMatric = '$ID' ";
                     //WHERE studnName = session ID";
                     $resulta = mysqli_query($con, $sqla) ;
                       while($row=mysqli_fetch_array($resulta))
@@ -172,16 +164,6 @@
         </div>
 
       </div>
-      <!-- /.container-fluid -->
-
-      <!-- Sticky Footer -->
-      <!-- <footer class="sticky-footer">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright © Your Website 2019</span>
-          </div>
-        </div>
-      </footer> -->
 
     </div>
     <!-- /.content-wrapper -->
@@ -275,10 +257,10 @@
         </div>
         <div class="modal-body">
             <form action="uploadformprocess.php" method="post" enctype="multipart/form-data">
-             <!--  INSERT HIDDEN ID HERE -->
               <div class="custom-file mb-3">
                 <input type="file" class="custom-file-input" id="fileName" name="fileName">
                 <label class="custom-file-label" for="customFile">Choose file</label>
+                <input type="hidden"  id="fbid" name="fbid" value="<?php echo $ID; ?>">
               </div>      
               <div class="mt-3">
                 <button type="submit" class="button btn-primary">Submit</button>
